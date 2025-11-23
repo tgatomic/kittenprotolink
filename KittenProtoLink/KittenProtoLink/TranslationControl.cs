@@ -124,7 +124,7 @@ public class TranslationControl
         if (rollLeft)  flags |= ThrusterMapFlags.RollLeft;
         if (rollRight) flags |= ThrusterMapFlags.RollRight;
 
-        var inputs = (ManualControlInputs)ManualInputsField.GetValue(vehicle);
+        var inputs = (ManualControlInputs)ManualInputsField.GetValue(vehicle)!;
         inputs.ThrusterCommandFlags &= ~(ThrusterMapFlags.PitchUp | ThrusterMapFlags.PitchDown |
                                          ThrusterMapFlags.YawLeft  | ThrusterMapFlags.YawRight  |
                                          ThrusterMapFlags.RollLeft | ThrusterMapFlags.RollRight);
