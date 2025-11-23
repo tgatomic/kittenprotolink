@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'          # tag like v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          include-prerelease: true
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore KittenProtoLink/ProtoLink.sln
+
+      - name: Build (Release)
+        run: dotnet build KittenProtoLink/ProtoLink.sln -c Release --no-restore
+
+      - name: Collect artifact payload
+        run: |
+          out=KittenProtoLink/KittenProtoLink/bin/Release/net9.0
+          pkg=artifacts/kittenprotolink
+          mkdir -p "$pkg"
+          cp "$out/KittenProtoLink.dll" "$pkg/"
+          cp "$out/KittenProtoLink.pdb" "$pkg/"
+          cp "$out/KittenProtoLink.deps.json" "$pkg/"
+          cp "$out/mod.toml" "$pkg/"
+
+      - name: Zip payload
+        run: |
+          cd artifacts
+          zip -r "kittenprotolink-${{ github.ref_name }}.zip" kittenprotolink
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kittenprotolink-${{ github.ref_name }}
+          path: artifacts/kittenprotolink
+          if-no-files-found: error
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: artifacts/kittenprotolink-${{ github.ref_name }}.zip
+
+      - name: Zip payload
+        run: |
+          cd artifacts
+          zip -r kittenprotolink-${{ github.ref_name }}.zip kittenprotolink
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: artifacts/kittenprotolink-${{ github.ref_name }}.zip
