@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <ModFolder>C:\Kitten Space Agency\Content\KittenProtoLink</ModFolder>
+    </PropertyGroup>
+    <Target Label="Post build events" Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(ConfigurationName) == Debug">
+        <Message Text="Copying ExampleThrustMod.dll to folder"/>
+        <Copy SourceFiles="$(OutDir)KittenProtoLink.deps.json" DestinationFolder="$(ModFolder)"/>
+        <Copy SourceFiles="$(OutDir)KittenProtoLink.dll" DestinationFolder="$(ModFolder)"/>
+        <Copy SourceFiles="$(OutDir)KittenProtoLink.pdb" DestinationFolder="$(ModFolder)"/>
+        <Copy SourceFiles="$(OutDir)mod.toml" DestinationFolder="$(ModFolder)"/>
+    </Target>
+</Project>

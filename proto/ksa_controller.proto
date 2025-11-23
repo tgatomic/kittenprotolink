@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package ksa.controller;
+
+// Common helpers -------------------------------------------------------------
+
+message Vector3d {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message Vector3dInt {
+  int32 x = 1;
+  int32 y = 2;
+  int32 z = 3;
+}
+
+message Quaterniond {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+  double w = 4;
+}
+
+// Telemetry ------------------------------------------------------------------
+
+message Telemetry {
+  double timestamp   = 1;   // seconds Unix time
+  string vessel_id   = 2;
+
+  OrbitTelemetry        orbit          = 10;
+  KinematicTelemetry    kinematics     = 11;
+  VehicleTelemetry       vehicle       = 12;
+  FlightComputerTelemetry flight_comp  = 13;
+  ManualControlState    manual_state   = 14;
+  NavballTelemetry      navball        = 15;
+}
+
+message OrbitTelemetry {
+  double apoapsis                     = 1;
+  double periapsis                    = 2;
+  double inclination                  = 3;
+  double eccentricity                 = 4;
+  double longitude_of_ascending_node  = 5;
+  double argument_of_periapsis        = 6;
+}
+
+message KinematicTelemetry {
+  Vector3d    position_ecl        = 1; // meters (ECL frame)
+  Vector3d    velocity_ecl        = 2; // m/s (ECL frame)
+  double      altitude_surface    = 3; // meters above mean radius
+  double      altitude_radar      = 4; // meters above terrain/ocean
+  double      surface_speed       = 5; // relative to rotating body
+  double      inertial_speed      = 6;
+  Quaterniond body_to_ecl         = 7;
+  Vector3d    acceleration_body   = 8;
+  Vector3d    angular_velocity    = 9;
+}
+
+message VehicleTelemetry {
+  MassTelemetry mass          = 10;  // optional mass info
+  EngineTelemetry engine      = 11;  // optional engine info
+}
+
+message MassTelemetry {
+  double propellant_mass     = 1;
+  double inert_mass          = 2;
+  double total_mass          = 3;
+  double delta_v_remaining   = 4;
+  double twr                 = 5; // thrust-to-weight ratio
+}
+
+message EngineTelemetry {
+  double throttle          = 1;  // 0..1
+  double min_throttle      = 2;
+  bool   engine_enabled    = 3;
+
+  // Optional engine-specific fields
+  double thrust            = 4;  // N
+  double fuel_flow         = 5;  // kg/s
+  double mixture_ratio     = 6;
+}
+
+message FlightComputerTelemetry {
+  enum BurnMode {
+    BURN_MODE_MANUAL = 0;
+    BURN_MODE_AUTO   = 1;
+  }
+
+  enum AttitudeMode {
+    ATTITUDE_MODE_MANUAL = 0;
+    ATTITUDE_MODE_AUTO   = 1;
+  }
+
+  BurnMode     burn_mode             = 1;
+  AttitudeMode attitude_mode         = 2;
+  string       attitude_frame        = 3;
+  bool         stabilization_active  = 4;
+  bool         manual_thrust_pulse   = 5;
+  double       burn_time_remaining   = 6;
+  double       burn_dv_remaining     = 7;
+}
+
+message ManualControlState {
+  bool  engine_on          = 1;
+  float throttle           = 2;
+  RotationControl rotation = 10;
+  TranslationControl translate = 11;
+}
+
+message RotationControl {
+  bool pitch_up            = 10;
+  bool pitch_down          = 11;
+  bool yaw_left            = 12;
+  bool yaw_right           = 13;
+  bool roll_left           = 14;
+  bool roll_right          = 15;
+}
+
+message TranslationControl {
+  bool translate_forward   = 16;
+  bool translate_backward  = 17;
+  bool translate_left      = 18;
+  bool translate_right     = 19;
+  bool translate_up        = 20;
+  bool translate_down      = 21;
+}
+
+message NavballTelemetry {
+   enum Frame {
+    FRAME_UNKNOWN = 0;
+    FRAME_ECLBODY = 1; // STAR
+    FRAME_ENUBODY = 2; // SURF
+    FRAME_LVLH    = 3; // ORBT
+    FRAME_VLFBODY = 4; // OVEL
+    FRAME_TGT     = 5; // TGT
+    FRAME_BURN    = 6; // BURN
+  }
+
+  Frame frame = 1;
+  Quaterniond navball_to_body = 2;
+  Vector3d    attitude_angles_deg = 3;
+  Vector3d attitude_rates_rad = 4;
+
+  // Direction vectors in navball-local coordinates (unit vectors)
+  Vector3d prograde_dir      = 10;
+  Vector3d retrograde_dir    = 11;
+  Vector3d radial_out_dir    = 12;
+  Vector3d radial_in_dir     = 13;
+  Vector3d normal_dir        = 14;
+  Vector3d antinormal_dir    = 15;
+  Vector3d target_dir        = 16;
+  Vector3d anti_target_dir   = 17;
+  Vector3d maneuver_dir      = 18;
+}
+
+// Control commands -----------------------------------------------------------
+
+message ManualControlCommand {
+  double             timestamp = 1;
+  string             vessel_id = 2;
+  ManualControlState command     = 3;
+  repeated ControlAction actions = 4;
+}
+
+enum ControlAction {
+  CONTROL_ACTION_NONE                    = 0;
+  CONTROL_ACTION_TOGGLE_STABILIZATION    = 1;
+  CONTROL_ACTION_TOGGLE_MANUAL_THRUST    = 2;
+  CONTROL_ACTION_RESET_NAVBALL_FRAME     = 3;
+}
+
+// Infrastructure -------------------------------------------------------------
+
+message Heartbeat {
+  uint64 unix_time_ms = 1;
+}
+
+message Envelope {
+  uint32 protocol_version = 1;
+  uint32 sequence         = 2;
+
+  oneof payload {
+    Telemetry             telemetry = 10;
+    ManualControlCommand  controls  = 11;
+    Heartbeat             heartbeat = 12;
+  }
+}

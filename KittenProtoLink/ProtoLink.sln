@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KittenProtoLink", "KittenProtoLink\KittenProtoLink.csproj", "{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSA.Dummy", "KSA.Dummy\KSA.Dummy.csproj", "{4E9B4430-41FC-49FA-BB22-51C462C80DD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		BuildAndTest|Any CPU = BuildAndTest|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.BuildAndTest|Any CPU.ActiveCfg = BuildAndTest|Any CPU
+		{268DCD4E-0209-4015-B9AC-6BF7C23D6C7B}.BuildAndTest|Any CPU.Build.0 = BuildAndTest|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.BuildAndTest|Any CPU.ActiveCfg = BuildAndTest|Any CPU
+		{4E9B4430-41FC-49FA-BB22-51C462C80DD8}.BuildAndTest|Any CPU.Build.0 = BuildAndTest|Any CPU
+	EndGlobalSection
+EndGlobal
