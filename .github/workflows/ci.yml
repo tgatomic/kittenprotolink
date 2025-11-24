@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -17,6 +20,14 @@ jobs:
         with:
           dotnet-version: '9.0.x'         # matches net9.0 target
           include-prerelease: true        # remove when 9.0 GA is out
+
+      - name: Configure GitHub Packages feed
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json \
+            --name StarMapLoader \
+            --username "$GITHUB_ACTOR" \
+            --password "${{ secrets.GITHUB_TOKEN }}" \
+            --store-password-in-clear-text
 
       - name: Cache NuGet
         uses: actions/cache@v4
