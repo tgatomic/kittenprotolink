@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
     permissions:
       contents: read
       packages: read
@@ -21,12 +21,26 @@ jobs:
           dotnet-version: '9.0.x'         # matches net9.0 target
           include-prerelease: true        # remove when 9.0 GA is out
 
-      - name: Configure GitHub Packages feed
+      - name: Ensure game assemblies are available
+        shell: pwsh
         run: |
-          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json \
-            --name StarMapLoader \
-            --username "$GITHUB_ACTOR" \
-            --password "${{ secrets.GITHUB_TOKEN }}" \
+          if (-not (Test-Path "Import\\KSA.dll")) {
+            if (-not $env:KSA_GAME_DIR) {
+              Write-Error "Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs (e.g. .../KSA_Data/Managed) on the self-hosted runner."
+            }
+            New-Item -ItemType Directory -Force -Path Import | Out-Null
+            Copy-Item -Path "$env:KSA_GAME_DIR\\*.dll" -Destination Import -Recurse
+          }
+
+      - name: Configure GitHub Packages feed
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json `
+            --name StarMapLoader `
+            --username "$env:GITHUB_ACTOR" `
+            --password "$env:GITHUB_TOKEN" `
             --store-password-in-clear-text
 
       - name: Cache NuGet

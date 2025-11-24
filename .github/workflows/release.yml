@@ -7,12 +7,23 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
     permissions:
       contents: write
       packages: read
     steps:
       - uses: actions/checkout@v4
+
+      - name: Ensure game assemblies are available
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "Import\\KSA.dll")) {
+            if (-not $env:KSA_GAME_DIR) {
+              Write-Error "Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs (e.g. .../KSA_Data/Managed) on the self-hosted runner."
+            }
+            New-Item -ItemType Directory -Force -Path Import | Out-Null
+            Copy-Item -Path "$env:KSA_GAME_DIR\\*.dll" -Destination Import -Recurse
+          }
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -21,11 +32,14 @@ jobs:
           include-prerelease: true
 
       - name: Configure GitHub Packages feed
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json \
-            --name StarMapLoader \
-            --username "$GITHUB_ACTOR" \
-            --password "${{ secrets.GITHUB_TOKEN }}" \
+          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json `
+            --name StarMapLoader `
+            --username "$env:GITHUB_ACTOR" `
+            --password "$env:GITHUB_TOKEN" `
             --store-password-in-clear-text
 
       - name: Cache NuGet
@@ -42,19 +56,22 @@ jobs:
         run: dotnet build KittenProtoLink/ProtoLink.sln -c Release --no-restore
 
       - name: Collect artifact payload
+        shell: pwsh
         run: |
-          out=KittenProtoLink/KittenProtoLink/bin/Release/net9.0
-          pkg=artifacts/kittenprotolink
-          mkdir -p "$pkg"
-          cp "$out/KittenProtoLink.dll" "$pkg/"
-          cp "$out/KittenProtoLink.pdb" "$pkg/"
-          cp "$out/KittenProtoLink.deps.json" "$pkg/"
-          cp "$out/mod.toml" "$pkg/"
+          $out = "KittenProtoLink/KittenProtoLink/bin/Release/net9.0"
+          $pkg = "artifacts/kittenprotolink"
+          New-Item -ItemType Directory -Force -Path $pkg | Out-Null
+          Copy-Item "$out/KittenProtoLink.dll" -Destination $pkg
+          Copy-Item "$out/KittenProtoLink.pdb" -Destination $pkg
+          Copy-Item "$out/KittenProtoLink.deps.json" -Destination $pkg
+          Copy-Item "$out/mod.toml" -Destination $pkg
 
       - name: Zip payload
+        shell: pwsh
         run: |
-          cd artifacts
-          zip -r "kittenprotolink-${{ github.ref_name }}.zip" kittenprotolink
+          $zip = "artifacts/kittenprotolink-$env:GITHUB_REF_NAME.zip"
+          if (Test-Path $zip) { Remove-Item $zip }
+          Compress-Archive -Path "artifacts/kittenprotolink/*" -DestinationPath $zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -62,17 +79,6 @@ jobs:
           name: kittenprotolink-${{ github.ref_name }}
           path: artifacts/kittenprotolink
           if-no-files-found: error
-
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          files: artifacts/kittenprotolink-${{ github.ref_name }}.zip
-
-      - name: Zip payload
-        run: |
-          cd artifacts
-          zip -r kittenprotolink-${{ github.ref_name }}.zip kittenprotolink
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
