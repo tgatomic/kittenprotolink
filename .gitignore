@@ -417,7 +417,7 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-
+Decompiled/
 Import/
 
 RemoteKsa/.idea/**/workspace.xml

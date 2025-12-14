@@ -13,6 +13,13 @@ jobs:
       contents: read
       packages: read
     steps:
+      - name: Disable Git FSMonitor (workaround for Windows self-hosted)
+        shell: pwsh
+        run: |
+          git config --global core.usebuiltinfsmonitor false
+          git config --global core.fsmonitor false
+          git fsmonitor--daemon stop 2>$null
+
       - uses: actions/checkout@v4
 
       - name: Setup .NET
