@@ -14,7 +14,7 @@ jobs:
       packages: read
     steps:
       - name: Disable Git FSMonitor (workaround for Windows self-hosted)
-        shell: pwsh
+        shell: powershell
         run: |
           git config --global core.usebuiltinfsmonitor false
           git config --global core.fsmonitor false
@@ -29,7 +29,7 @@ jobs:
           include-prerelease: true        # remove when 9.0 GA is out
 
       - name: Ensure game assemblies are available
-        shell: pwsh
+        shell: powershell
         run: |
           if (-not (Test-Path "Import\\KSA.dll")) {
             if (-not $env:KSA_GAME_DIR) {
@@ -40,7 +40,7 @@ jobs:
           }
 
       - name: Configure GitHub Packages feed
-        shell: pwsh
+        shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
