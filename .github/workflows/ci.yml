@@ -18,7 +18,6 @@ jobs:
         run: |
           git config --global core.usebuiltinfsmonitor false
           git config --global core.fsmonitor false
-          git fsmonitor--daemon stop || echo fsmonitor daemon not running (ok)
 
       - uses: actions/checkout@v4
 
