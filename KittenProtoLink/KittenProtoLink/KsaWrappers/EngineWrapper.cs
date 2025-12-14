@@ -18,8 +18,8 @@ public class EngineWrapper
             Throttle = throttle,
             MinThrottle = vehicle.GetMinThrottle(),
             EngineEnabled = engineOn,
-            Thrust = fc.VehicleConfig.TotalEngineThrust * throttle,
-            FuelFlow = fc.VehicleConfig.TotalEngineMassFlowRate * throttle,
+            Thrust = fc.VehicleConfig.TotalEngineVacuumThrust * throttle,
+            FuelFlow = fc.VehicleConfig.TotalEngineVacuumMassFlowRate * throttle,
         };
 
         if (_oldVehicle == null)

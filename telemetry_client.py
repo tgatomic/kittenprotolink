@@ -30,9 +30,9 @@ def _print_telemetry(telemetry: pb.Telemetry):
     manual = telemetry.manual_state if telemetry.HasField("manual_state") else None
     navball = telemetry.navball if telemetry.HasField("navball") else None
 
-    if vehicle is not None:
-        print("\nVehicle")
-        print(vehicle)
+    # if vehicle is not None:
+    #     print("\nVehicle")
+    #     print(vehicle)
 
     # if orbit is not None:
     #     print("\nOrbit")
@@ -61,7 +61,7 @@ _seq = 0
 async def toggle_task(writer: asyncio.StreamWriter):
     global _seq
     while True:
-        await asyncio.sleep(10)
+        await asyncio.sleep(30)
         _seq += 1
         command = pb.ManualControlCommand(
             timestamp=time.time(),

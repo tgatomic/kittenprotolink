@@ -3,10 +3,9 @@ using StarMap.API;
 
 namespace KittenProtoLink;
 
-public class ProtoLink : IStarMapMod, IStarMapOnUi
+[StarMapMod]
+public class ProtoLink
 {
-    public bool ImmediateUnload => false;
-
     private TelemetryServer? _telemetryServer;
     
     private long _lastSentTime;
@@ -15,6 +14,7 @@ public class ProtoLink : IStarMapMod, IStarMapOnUi
     private readonly TelemetryBuilder _telemetryBuilder = new();
     private readonly TranslationControl _translationControl = new();
 
+    [StarMapAfterGui]
     public void OnAfterUi(double dt)
     {
         if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() > _lastSentTime + FrequencyMs)
@@ -30,10 +30,12 @@ public class ProtoLink : IStarMapMod, IStarMapOnUi
         }
     }
 
+    [StarMapBeforeGui]
     public void OnBeforeUi(double dt)
     {
     }
 
+    [StarMapBeforeMain]
     public void OnFullyLoaded()
     {
         _telemetryServer = new TelemetryServer();
@@ -43,10 +45,12 @@ public class ProtoLink : IStarMapMod, IStarMapOnUi
         Patcher.Patch();
     }
 
+    [StarMapImmediateLoad]
     public void OnImmediatLoad()
     {
     }
 
+    [StarMapUnload]
     public void Unload()
     {
         _telemetryServer?.Dispose();

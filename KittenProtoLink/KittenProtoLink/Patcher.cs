@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using KSA;
 
 namespace KittenProtoLink;
 
@@ -17,6 +18,13 @@ internal static class Patcher
     {
         _harmony?.UnpatchAll(_harmony.Id);
         _harmony = null;
+    }
+    
+    [HarmonyPatch(typeof(ModLibrary), nameof(ModLibrary.LoadAll))]
+    [HarmonyPostfix]
+    public static void AfterLoad()
+    {
+        Console.WriteLine("ModLibrary.LoadAll patched by SimpleMod.");
     }
 }
 
