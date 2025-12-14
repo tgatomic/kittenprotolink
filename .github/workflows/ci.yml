@@ -13,12 +13,12 @@ jobs:
       contents: read
       packages: read
     steps:
-      - name: Disable Git FSMonitor (workaround for Windows self-hosted)
-        shell: powershell
+      - name: Disable Git FSMonitor (workaround)
+        shell: cmd
         run: |
           git config --global core.usebuiltinfsmonitor false
           git config --global core.fsmonitor false
-          git fsmonitor--daemon stop 2>$null
+          git fsmonitor--daemon stop
 
       - uses: actions/checkout@v4
 
