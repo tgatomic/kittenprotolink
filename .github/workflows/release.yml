@@ -18,10 +18,7 @@ jobs:
         shell: cmd
         run: |
             if exist "Import\KSA.dll" exit /b 0
-            if not defined KSA_GAME_DIR (
-            echo Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs ^(e.g. ...\KSA_Data\Managed^) on the self-hosted runner.
-            exit /b 1
-            )
+            if not defined KSA_GAME_DIR echo Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs, e.g. ...\KSA_Data\Managed on the self-hosted runner. & exit /b 1
             if not exist "Import" mkdir "Import"
             copy /Y "%KSA_GAME_DIR%\*.dll" "Import\"
 
