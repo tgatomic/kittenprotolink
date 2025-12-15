@@ -63,12 +63,6 @@ jobs:
           copy /Y "%OUT%\KittenProtoLink.deps.json" "%PKG%\"
           copy /Y "%OUT%\mod.toml" "%PKG%\"
 
-      - name: Debug tar resolution
-        shell: cmd
-        run: |
-            where tar
-            tar --version
-
       - name: Zip payload (PowerShell via cmd)
         shell: cmd
         run: |
