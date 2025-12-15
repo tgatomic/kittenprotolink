@@ -63,14 +63,18 @@ jobs:
           copy /Y "%OUT%\KittenProtoLink.deps.json" "%PKG%\"
           copy /Y "%OUT%\mod.toml" "%PKG%\"
 
-      - name: Zip payload
+      - name: Debug tar resolution
+        shell: cmd
+        run: |
+            where tar
+            tar --version
+
+      - name: Zip payload (PowerShell via cmd)
         shell: cmd
         run: |
             if exist "artifacts\%ZIP_NAME%" del /F /Q "artifacts\%ZIP_NAME%"
-            powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-            "Compress-Archive -Path 'artifacts\kittenprotolink\*' -DestinationPath 'artifacts\%ZIP_NAME%' -Force"
-            powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-            "Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::OpenRead('artifacts\%ZIP_NAME%').Entries | Select FullName,Length"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "& { Compress-Archive -Path 'artifacts\kittenprotolink\*' -DestinationPath ('artifacts\%ZIP_NAME%') -Force }"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "& { Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::OpenRead(('artifacts\%ZIP_NAME%')).Entries | Select-Object FullName,Length }"
 
       - name: Upload artifact (folder)
         uses: actions/upload-artifact@v4
