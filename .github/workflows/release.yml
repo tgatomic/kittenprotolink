@@ -64,10 +64,13 @@ jobs:
           copy /Y "%OUT%\mod.toml" "%PKG%\"
 
       - name: Zip payload
+        shell: cmd
         run: |
-          if not exist "artifacts" mkdir "artifacts"
-          if exist "artifacts\%ZIP_NAME%" del /F /Q "artifacts\%ZIP_NAME%"
-          tar -a -c -f "artifacts\%ZIP_NAME%" -C "artifacts\kittenprotolink" .
+            if exist "artifacts\%ZIP_NAME%" del /F /Q "artifacts\%ZIP_NAME%"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+            "Compress-Archive -Path 'artifacts\kittenprotolink\*' -DestinationPath 'artifacts\%ZIP_NAME%' -Force"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+            "Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::OpenRead('artifacts\%ZIP_NAME%').Entries | Select FullName,Length"
 
       - name: Upload artifact (folder)
         uses: actions/upload-artifact@v4
