@@ -34,7 +34,9 @@ jobs:
 
 
       - name: Restore
+        shell: cmd
         run: dotnet restore KittenProtoLink/ProtoLink.sln
 
       - name: Build (Release)
+        shell: cmd
         run: dotnet build KittenProtoLink/ProtoLink.sln -c Release --no-restore
