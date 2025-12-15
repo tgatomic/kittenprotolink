@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: [self-hosted, windows]
+    environment: Build
+    env:
+      KSA_GAME_DIR: ${{ vars.KSA_GAME_DIR }}
     permissions:
       contents: read
       packages: read
@@ -22,33 +25,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Ensure game assemblies are available
-        shell: powershell
+        shell: cmd
         run: |
-          if (-not (Test-Path "Import\\KSA.dll")) {
-            if (-not $env:KSA_GAME_DIR) {
-              Write-Error "Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs (e.g. .../KSA_Data/Managed) on the self-hosted runner."
-            }
-            New-Item -ItemType Directory -Force -Path Import | Out-Null
-            Copy-Item -Path "$env:KSA_GAME_DIR\\*.dll" -Destination Import -Recurse
-          }
-
-      - name: Configure GitHub Packages feed
-        shell: powershell
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json `
-            --name StarMapLoader `
-            --username "$env:GITHUB_ACTOR" `
-            --password "$env:GITHUB_TOKEN" `
-            --store-password-in-clear-text
-
-      - name: Cache NuGet
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
-          restore-keys: nuget-${{ runner.os }}-
+          if exist "Import\KSA.dll" exit /b 0
+          if "%KSA_GAME_DIR%"=="" (
+            echo Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs (e.g. ...\KSA_Data\Managed) on the self-hosted runner.
+            exit /b 1
+          )
+          if not exist Import mkdir Import
+          copy /Y "%KSA_GAME_DIR%\*.dll" "Import\"
 
       - name: Restore
         run: dotnet restore KittenProtoLink/ProtoLink.sln

@@ -21,21 +21,35 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-        <Reference Include="..\..\Import\KSA.dll">
-            <ExcludeAssets>runtime</ExcludeAssets>
+    <PropertyGroup>
+        <!-- Folder where your workflow copies the game's DLLs -->
+        <GameImportDir>$(MSBuildProjectDirectory)\..\..\Import</GameImportDir>
+    </PropertyGroup>
+
+    <ItemGroup Condition="Exists('$(GameImportDir)\KSA.dll')">
+        <Reference Include="KSA">
+            <HintPath>$(GameImportDir)\KSA.dll</HintPath>
+            <Private>false</Private> <!-- key: don't copy to output -->
         </Reference>
-        <Reference Include="..\..\Import\Brutal.ImGui.dll">
-            <ExcludeAssets>runtime</ExcludeAssets>
+
+        <Reference Include="Brutal.ImGui">
+            <HintPath>$(GameImportDir)\Brutal.ImGui.dll</HintPath>
+            <Private>false</Private>
         </Reference>
-        <Reference Include="..\..\Import\Brutal.ImGui.Extensions.dll">
-            <ExcludeAssets>runtime</ExcludeAssets>
+
+        <Reference Include="Brutal.ImGui.Extensions">
+            <HintPath>$(GameImportDir)\Brutal.ImGui.Extensions.dll</HintPath>
+            <Private>false</Private>
         </Reference>
-        <Reference Include="..\..\Import\Brutal.Core.Numerics.dll">
-            <ExcludeAssets>runtime</ExcludeAssets>
+
+        <Reference Include="Brutal.Core.Numerics">
+            <HintPath>$(GameImportDir)\Brutal.Core.Numerics.dll</HintPath>
+            <Private>false</Private>
         </Reference>
-        <Reference Include="..\..\Import\Brutal.Glfw.dll">
-            <ExcludeAssets>runtime</ExcludeAssets>
+
+        <Reference Include="Brutal.Glfw">
+            <HintPath>$(GameImportDir)\Brutal.Glfw.dll</HintPath>
+            <Private>false</Private>
         </Reference>
     </ItemGroup>
 
