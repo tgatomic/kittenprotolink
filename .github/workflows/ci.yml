@@ -21,12 +21,6 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'         # matches net9.0 target
-          include-prerelease: true        # remove when 9.0 GA is out
-
       - name: Ensure game assemblies are available
         shell: powershell
         run: |
