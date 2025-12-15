@@ -3,74 +3,73 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'          # tag like v1.0.0
+      - 'v*'   # v1.0.0
 
 jobs:
   build:
     runs-on: [self-hosted, windows]
+    environment: Build
+    env:
+      KSA_GAME_DIR: ${{ vars.KSA_GAME_DIR }}
+
     permissions:
       contents: write
       packages: read
+
+    defaults:
+      run:
+        shell: cmd
+
     steps:
+      - name: Disable Git FSMonitor (workaround)
+        run: |
+          git config --global core.usebuiltinfsmonitor false
+          git config --global core.fsmonitor false
+
       - uses: actions/checkout@v4
 
+      - name: Derive version from tag
+        run: |
+          set "TAG=%GITHUB_REF_NAME%"
+          set "VERSION=%TAG:~1%"
+          echo VERSION=%VERSION%>> "%GITHUB_ENV%"
+          echo ZIP_NAME=kittenprotolink-%TAG%.zip>> "%GITHUB_ENV%"
+
       - name: Ensure game assemblies are available
-        shell: cmd
         run: |
-            if exist "Import\KSA.dll" exit /b 0
-            if not defined KSA_GAME_DIR echo Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs, e.g. ...\KSA_Data\Managed on the self-hosted runner. & exit /b 1
-            if not exist "Import" mkdir "Import"
-            copy /Y "%KSA_GAME_DIR%\*.dll" "Import\"
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
-          include-prerelease: true
-
-      - name: Configure GitHub Packages feed
-        shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          dotnet nuget add source https://nuget.pkg.github.com/StarMapLoader/index.json `
-            --name StarMapLoader `
-            --username "$env:GITHUB_ACTOR" `
-            --password "$env:GITHUB_TOKEN" `
-            --store-password-in-clear-text
-
-      - name: Cache NuGet
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
-          restore-keys: nuget-${{ runner.os }}-
+          if exist "Import\KSA.dll" exit /b 0
+          if not defined KSA_GAME_DIR echo Import folder missing. Set KSA_GAME_DIR to the folder containing the game's DLLs, e.g. ...\KSA_Data\Managed on the self-hosted runner. & exit /b 1
+          if not exist "Import" mkdir "Import"
+          copy /Y "%KSA_GAME_DIR%\*.dll" "Import\"
 
       - name: Restore
         run: dotnet restore KittenProtoLink/ProtoLink.sln
 
-      - name: Build (Release)
-        run: dotnet build KittenProtoLink/ProtoLink.sln -c Release --no-restore
+      - name: Build (Release) with tag version
+        run: |
+          dotnet build KittenProtoLink/ProtoLink.sln -c Release --no-restore ^
+            /p:Version=%VERSION% ^
+            /p:AssemblyVersion=%VERSION% ^
+            /p:FileVersion=%VERSION% ^
+            /p:InformationalVersion=%VERSION%+%GITHUB_SHA:~0,7%
 
       - name: Collect artifact payload
-        shell: pwsh
         run: |
-          $out = "KittenProtoLink/KittenProtoLink/bin/Release/net9.0"
-          $pkg = "artifacts/kittenprotolink"
-          New-Item -ItemType Directory -Force -Path $pkg | Out-Null
-          Copy-Item "$out/KittenProtoLink.dll" -Destination $pkg
-          Copy-Item "$out/KittenProtoLink.pdb" -Destination $pkg
-          Copy-Item "$out/KittenProtoLink.deps.json" -Destination $pkg
-          Copy-Item "$out/mod.toml" -Destination $pkg
+          set "OUT=KittenProtoLink\KittenProtoLink\bin\Release\net10.0"
+          set "PKG=artifacts\kittenprotolink"
+          if not exist "%PKG%" mkdir "%PKG%"
+          copy /Y "%OUT%\KittenProtoLink.dll" "%PKG%\"
+          copy /Y "%OUT%\KittenProtoLink.pdb" "%PKG%\"
+          copy /Y "%OUT%\KittenProtoLink.deps.json" "%PKG%\"
+          copy /Y "%OUT%\mod.toml" "%PKG%\"
 
       - name: Zip payload
-        shell: pwsh
         run: |
-          $zip = "artifacts/kittenprotolink-$env:GITHUB_REF_NAME.zip"
-          if (Test-Path $zip) { Remove-Item $zip }
-          Compress-Archive -Path "artifacts/kittenprotolink/*" -DestinationPath $zip
+          if not exist "artifacts" mkdir "artifacts"
+          if exist "artifacts\%ZIP_NAME%" del /F /Q "artifacts\%ZIP_NAME%"
+          tar -a -c -f "artifacts\%ZIP_NAME%" -C "artifacts\kittenprotolink" .
 
-      - name: Upload artifact
+      - name: Upload artifact (folder)
         uses: actions/upload-artifact@v4
         with:
           name: kittenprotolink-${{ github.ref_name }}
@@ -81,4 +80,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          files: artifacts/kittenprotolink-${{ github.ref_name }}.zip
+          files: artifacts/${{ env.ZIP_NAME }}
