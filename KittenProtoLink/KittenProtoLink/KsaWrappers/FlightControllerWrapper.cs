@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class FlightControllerWrapper
+public class FlightControllerWrapper (TelemetryThresholds thresholds)
 {
     private FlightComputerTelemetry? _oldFlightComputer;
     
@@ -40,13 +40,13 @@ public class FlightControllerWrapper
     
     private static bool HasSignificantChange(FlightComputerTelemetry oldFlight, FlightComputerTelemetry newFlight)
     {
-        if (newFlight.BurnMode != oldFlight.BurnMode) return true;
-        if (newFlight.AttitudeMode != oldFlight.AttitudeMode) return true;
-        if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
-        if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
-        if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
-        if (Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > TelemetryThresholds.BurnTimeRemaining) return true;
-        if (Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > TelemetryThresholds.BurnDvRemaining) return true;
+        // if (newFlight.BurnMode != oldFlight.BurnMode) return true;
+        // if (newFlight.AttitudeMode != oldFlight.AttitudeMode) return true;
+        // if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
+        // if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
+        // if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
+        // if (Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > TelemetryThresholds.BurnTimeRemaining) return true;
+        // if (Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > TelemetryThresholds.BurnDvRemaining) return true;
     
         return false;
     }

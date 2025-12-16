@@ -3,7 +3,8 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class NavballWrapper {
+public class NavballWrapper (TelemetryThresholds thresholds)
+{
     private NavballTelemetry? _last;
 
     public NavballTelemetry? BuildNavballTelemetry(Vehicle vehicle) {
@@ -43,9 +44,9 @@ public class NavballWrapper {
     private static bool HasSignificantChange(NavballTelemetry oldOrbit, NavballTelemetry newOrbit)
     {
         if (oldOrbit.Frame != newOrbit.Frame) return true;
-        if (Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > TelemetryThresholds.Apoapsis) return true;
-        if (Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > TelemetryThresholds.Periapsis) return true;
-        if (Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > TelemetryThresholds.Inclination) return true;
+        // if (Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > TelemetryThresholds.Apoapsis) return true;
+        // if (Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > TelemetryThresholds.Periapsis) return true;
+        // if (Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > TelemetryThresholds.Inclination) return true;
         
         return false;
     }

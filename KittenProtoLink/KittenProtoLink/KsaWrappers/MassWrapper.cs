@@ -36,11 +36,11 @@ public class MassWrapper
     
     private static bool HasSignificantChange(MassTelemetry oldMass, MassTelemetry newMass)
     {
-        if (Helpers.Diff(newMass.PropellantMass, oldMass.PropellantMass) > TelemetryThresholds.PropellantMass) return true;
-        if (Helpers.Diff(newMass.InertMass, oldMass.InertMass) > TelemetryThresholds.InertMass) return true;
-        if (Helpers.Diff(newMass.TotalMass, oldMass.TotalMass) > TelemetryThresholds.TotalMass) return true;
-        if (Helpers.Diff(newMass.DeltaVRemaining, oldMass.DeltaVRemaining) > TelemetryThresholds.DeltaVRemaining) return true;
-        if (Helpers.Diff(newMass.Twr, oldMass.Twr) > TelemetryThresholds.ThrustWeightRatio) return true;
+        // if (Helpers.Diff(newMass.PropellantMass, oldMass.PropellantMass) > TelemetryThresholds.PropellantMass) return true;
+        // if (Helpers.Diff(newMass.InertMass, oldMass.InertMass) > TelemetryThresholds.InertMass) return true;
+        // if (Helpers.Diff(newMass.TotalMass, oldMass.TotalMass) > TelemetryThresholds.TotalMass) return true;
+        // if (Helpers.Diff(newMass.DeltaVRemaining, oldMass.DeltaVRemaining) > TelemetryThresholds.DeltaVRemaining) return true;
+        // if (Helpers.Diff(newMass.Twr, oldMass.Twr) > TelemetryThresholds.ThrustWeightRatio) return true;
 
         return false;
     }

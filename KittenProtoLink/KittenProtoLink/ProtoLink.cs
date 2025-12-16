@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Text.Json;
+using KittenProtoLink.KsaWrappers;
 using KSA;
 using StarMap.API;
 
@@ -11,7 +14,8 @@ public class ProtoLink
     private long _lastSentTime;
     private const int FrequencyMs = 30;
 
-    private readonly TelemetryBuilder _telemetryBuilder = new();
+    private TelemetryThresholds _thresholds;
+    private TelemetryBuilder _telemetryBuilder;
     private readonly TranslationControl _translationControl = new();
 
     [StarMapAfterGui]
@@ -41,6 +45,24 @@ public class ProtoLink
         _telemetryServer = new TelemetryServer();
         _telemetryServer.CommandReceived += _translationControl.HandleCommand;
         _telemetryServer.Start();
+        
+        var dllPath = Assembly.GetExecutingAssembly().Location;
+        var dllDir  = Path.GetDirectoryName(dllPath)!;
+        var filePath = Path.Combine(dllDir, "Thresholds.json");
+        
+        if (File.Exists(filePath))
+        {
+            var thresholdsRaw = File.ReadAllText("Thresholds.json");
+            _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw) ?? new TelemetryThresholds();
+            
+            Console.WriteLine("Thresholds loaded");
+        }
+        else
+        {
+            throw new Exception("Thresholds file not found");
+        }
+
+        _telemetryBuilder = new(_thresholds);
 
         Patcher.Patch();
     }

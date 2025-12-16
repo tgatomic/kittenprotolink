@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class EngineWrapper
+public class EngineWrapper (TelemetryThresholds thresholds)
 {
     private EngineTelemetry? _oldVehicle;
     
@@ -47,11 +47,11 @@ public class EngineWrapper
 
     private static bool HasSignificantChange(EngineTelemetry oldVehicle, EngineTelemetry newVehicle)
     {
-        if (newVehicle.EngineEnabled != oldVehicle.EngineEnabled) return true;
-        if (Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > TelemetryThresholds.FuelFlow) return true;
-        if (Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > TelemetryThresholds.Throttle) return true;
-        if (Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > TelemetryThresholds.Throttle) return true;
-        if (Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > TelemetryThresholds.Thrust) return true;
+        // if (newVehicle.EngineEnabled != oldVehicle.EngineEnabled) return true;
+        // if (Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > TelemetryThresholds.FuelFlow) return true;
+        // if (Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > TelemetryThresholds.Throttle) return true;
+        // if (Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > TelemetryThresholds.Throttle) return true;
+        // if (Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > TelemetryThresholds.Thrust) return true;
         
         return false;
     }

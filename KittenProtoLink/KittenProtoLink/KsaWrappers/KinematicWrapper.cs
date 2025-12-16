@@ -4,7 +4,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class KinematicWrapper
+public class KinematicWrapper (TelemetryThresholds thresholds)
 {
     private KinematicTelemetry? _oldKinematicTelemetry;
     
@@ -41,15 +41,15 @@ public class KinematicWrapper
     
     private static bool HasSignificantChange(KinematicTelemetry oldMass, KinematicTelemetry newMass)
     {
-        if (Helpers.Diff(newMass.PositionEcl, oldMass.PositionEcl) > TelemetryThresholds.PositionEcl) return true;
-        if (Helpers.Diff(newMass.VelocityEcl, oldMass.VelocityEcl) > TelemetryThresholds.VelocityEcl) return true;
-        if (Helpers.Diff(newMass.AltitudeSurface, oldMass.AltitudeSurface) > TelemetryThresholds.AltitudeSurface) return true;
-        if (Helpers.Diff(newMass.AltitudeRadar, oldMass.AltitudeRadar) > TelemetryThresholds.AltitudeRadar) return true;
-        if (Helpers.Diff(newMass.SurfaceSpeed, oldMass.SurfaceSpeed) > TelemetryThresholds.SurfaceSpeed) return true;
-        if (Helpers.Diff(newMass.InertialSpeed, oldMass.InertialSpeed) > TelemetryThresholds.InertialSpeed) return true;
-        if (Helpers.Diff(newMass.BodyToEcl, oldMass.BodyToEcl) > TelemetryThresholds.BodyToEcl) return true;
-        if (Helpers.Diff(newMass.AccelerationBody, oldMass.AccelerationBody) > TelemetryThresholds.AccelerationBody) return true;
-        if (Helpers.Diff(newMass.AngularVelocity, oldMass.AngularVelocity) > TelemetryThresholds.AngularVelocity) return true;
+        // if (Helpers.Diff(newMass.PositionEcl, oldMass.PositionEcl) > TelemetryThresholds.PositionEcl) return true;
+        // if (Helpers.Diff(newMass.VelocityEcl, oldMass.VelocityEcl) > TelemetryThresholds.VelocityEcl) return true;
+        // if (Helpers.Diff(newMass.AltitudeSurface, oldMass.AltitudeSurface) > TelemetryThresholds.AltitudeSurface) return true;
+        // if (Helpers.Diff(newMass.AltitudeRadar, oldMass.AltitudeRadar) > TelemetryThresholds.AltitudeRadar) return true;
+        // if (Helpers.Diff(newMass.SurfaceSpeed, oldMass.SurfaceSpeed) > TelemetryThresholds.SurfaceSpeed) return true;
+        // if (Helpers.Diff(newMass.InertialSpeed, oldMass.InertialSpeed) > TelemetryThresholds.InertialSpeed) return true;
+        // if (Helpers.Diff(newMass.BodyToEcl, oldMass.BodyToEcl) > TelemetryThresholds.BodyToEcl) return true;
+        // if (Helpers.Diff(newMass.AccelerationBody, oldMass.AccelerationBody) > TelemetryThresholds.AccelerationBody) return true;
+        // if (Helpers.Diff(newMass.AngularVelocity, oldMass.AngularVelocity) > TelemetryThresholds.AngularVelocity) return true;
 
         return false;
     }
