@@ -17,6 +17,8 @@ public class ProtoLink
     private TelemetryThresholds _thresholds;
     private TelemetryBuilder _telemetryBuilder;
     private readonly TranslationControl _translationControl = new();
+    
+    private const string ThreasholdsJsonFile = "Thresholds.json";
 
     [StarMapAfterGui]
     public void OnAfterUi(double dt)
@@ -42,20 +44,25 @@ public class ProtoLink
     [StarMapBeforeMain]
     public void OnFullyLoaded()
     {
-        _telemetryServer = new TelemetryServer();
-        _telemetryServer.CommandReceived += _translationControl.HandleCommand;
-        _telemetryServer.Start();
-        
         var dllPath = Assembly.GetExecutingAssembly().Location;
         var dllDir  = Path.GetDirectoryName(dllPath)!;
-        var filePath = Path.Combine(dllDir, "Thresholds.json");
+        var filePath = Path.Combine(dllDir, ThreasholdsJsonFile);
         
         if (File.Exists(filePath))
         {
-            var thresholdsRaw = File.ReadAllText("Thresholds.json");
-            _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw) ?? new TelemetryThresholds();
+            var thresholdsRaw = File.ReadAllText(filePath);
+            try
+            {
+                _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw)!;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to decode Thresholds.json: " + e.Message);
+                return;
+            }
             
             Console.WriteLine("Thresholds loaded");
+            Console.WriteLine(JsonSerializer.Serialize(_thresholds));
         }
         else
         {
@@ -63,6 +70,10 @@ public class ProtoLink
         }
 
         _telemetryBuilder = new(_thresholds);
+        
+        _telemetryServer = new TelemetryServer();
+        _telemetryServer.CommandReceived += _translationControl.HandleCommand;
+        _telemetryServer.Start();
 
         Patcher.Patch();
     }
