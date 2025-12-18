@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class MassWrapper
+public class MassWrapper(TelemetryThresholds thresholds)
 {
     private MassTelemetry? _oldMass;
 
@@ -34,13 +34,13 @@ public class MassWrapper
         return result;
     }
     
-    private static bool HasSignificantChange(MassTelemetry oldMass, MassTelemetry newMass)
+    private bool HasSignificantChange(MassTelemetry oldMass, MassTelemetry newMass)
     {
-        // if (Helpers.Diff(newMass.PropellantMass, oldMass.PropellantMass) > TelemetryThresholds.PropellantMass) return true;
-        // if (Helpers.Diff(newMass.InertMass, oldMass.InertMass) > TelemetryThresholds.InertMass) return true;
-        // if (Helpers.Diff(newMass.TotalMass, oldMass.TotalMass) > TelemetryThresholds.TotalMass) return true;
-        // if (Helpers.Diff(newMass.DeltaVRemaining, oldMass.DeltaVRemaining) > TelemetryThresholds.DeltaVRemaining) return true;
-        // if (Helpers.Diff(newMass.Twr, oldMass.Twr) > TelemetryThresholds.ThrustWeightRatio) return true;
+        if (Helpers.Diff(newMass.PropellantMass, oldMass.PropellantMass) > thresholds.Mass.PropellantMass) return true;
+        if (Helpers.Diff(newMass.InertMass, oldMass.InertMass) > thresholds.Mass.InertMass) return true;
+        if (Helpers.Diff(newMass.TotalMass, oldMass.TotalMass) > thresholds.Mass.TotalMass) return true;
+        if (Helpers.Diff(newMass.DeltaVRemaining, oldMass.DeltaVRemaining) > thresholds.Mass.DeltaVRemaining) return true;
+        if (Helpers.Diff(newMass.Twr, oldMass.Twr) > thresholds.Mass.ThrustWeightRatio) return true;
 
         return false;
     }

@@ -23,14 +23,6 @@ public class NavballWrapper (TelemetryThresholds thresholds)
             NavballToBody = Helpers.ToQuaterniond(nav.Navball2Body),
             AttitudeAnglesDeg = Helpers.ToVector3d(nav.AttitudeAngles),
             AttitudeRatesRad = Helpers.ToVector3d(nav.AttitudeRates)
-            
-            // If NavBallData exposes these vectors, populate them:
-            // (names here are guesses; check NavBallData in ILSpy)
-            // telemetry.ProgradeDir    = Helpers.ToVector3d(nav.ProgradeDirection);
-            // telemetry.RetrogradeDir  = Helpers.ToVector3d(nav.RetrogradeDirection);
-            // telemetry.TargetDir      = Helpers.ToVector3d(nav.TargetDirection);
-            // telemetry.ManeuverDir    = Helpers.ToVector3d(nav.ManeuverDirection);
-            // ...etc...
         };
 
         if (_last == null || HasSignificantChange(_last, telemetry)) {
@@ -41,12 +33,12 @@ public class NavballWrapper (TelemetryThresholds thresholds)
         return null;
     }
     
-    private static bool HasSignificantChange(NavballTelemetry oldOrbit, NavballTelemetry newOrbit)
+    private bool HasSignificantChange(NavballTelemetry oldOrbit, NavballTelemetry newOrbit)
     {
         if (oldOrbit.Frame != newOrbit.Frame) return true;
-        // if (Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > TelemetryThresholds.Apoapsis) return true;
-        // if (Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > TelemetryThresholds.Periapsis) return true;
-        // if (Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > TelemetryThresholds.Inclination) return true;
+        if (Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > thresholds.Orbit.Apoapsis) return true;
+        if (Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > thresholds.Orbit.Periapsis) return true;
+        if (Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > thresholds.Orbit.Inclination) return true;
         
         return false;
     }

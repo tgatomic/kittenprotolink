@@ -38,15 +38,15 @@ public class FlightControllerWrapper (TelemetryThresholds thresholds)
         return hasChanged;
     }
     
-    private static bool HasSignificantChange(FlightComputerTelemetry oldFlight, FlightComputerTelemetry newFlight)
+    private bool HasSignificantChange(FlightComputerTelemetry oldFlight, FlightComputerTelemetry newFlight)
     {
-        // if (newFlight.BurnMode != oldFlight.BurnMode) return true;
-        // if (newFlight.AttitudeMode != oldFlight.AttitudeMode) return true;
-        // if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
-        // if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
-        // if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
-        // if (Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > TelemetryThresholds.BurnTimeRemaining) return true;
-        // if (Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > TelemetryThresholds.BurnDvRemaining) return true;
+        if (newFlight.BurnMode != oldFlight.BurnMode) return true;
+        if (newFlight.AttitudeMode != oldFlight.AttitudeMode) return true;
+        if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
+        if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
+        if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
+        if (Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > thresholds.FlightComputer.BurnTimeRemaining) return true;
+        if (Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > thresholds.FlightComputer.BurnDvRemaining) return true;
     
         return false;
     }

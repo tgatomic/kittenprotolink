@@ -45,13 +45,13 @@ public class EngineWrapper (TelemetryThresholds thresholds)
         vehicle.SetEnum(engineOn ? VehicleEngine.MainShutdown : VehicleEngine.MainIgnite);
     }
 
-    private static bool HasSignificantChange(EngineTelemetry oldVehicle, EngineTelemetry newVehicle)
+    private bool HasSignificantChange(EngineTelemetry oldVehicle, EngineTelemetry newVehicle)
     {
-        // if (newVehicle.EngineEnabled != oldVehicle.EngineEnabled) return true;
-        // if (Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > TelemetryThresholds.FuelFlow) return true;
-        // if (Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > TelemetryThresholds.Throttle) return true;
-        // if (Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > TelemetryThresholds.Throttle) return true;
-        // if (Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > TelemetryThresholds.Thrust) return true;
+        if (newVehicle.EngineEnabled != oldVehicle.EngineEnabled) return true;
+        if (Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > thresholds.Engine.FuelFlow) return true;
+        if (Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > thresholds.Engine.Throttle) return true;
+        if (Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > thresholds.Engine.Throttle) return true;
+        if (Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > thresholds.Engine.Thrust) return true;
         
         return false;
     }

@@ -7,7 +7,7 @@ namespace KittenProtoLink.KsaWrappers;
 public class VehicleWrapper (TelemetryThresholds thresholds)
 {
     private readonly EngineWrapper _engineWrapper = new(thresholds);
-    private readonly MassWrapper _massWrapper = new();
+    private readonly MassWrapper _massWrapper = new(thresholds);
 
     public VehicleTelemetry? BuildVehicleTelemetry(Vehicle vehicle)
     {

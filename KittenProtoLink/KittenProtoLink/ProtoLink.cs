@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Text.Json;
-using KittenProtoLink.KsaWrappers;
 using KSA;
 using StarMap.API;
 
@@ -13,13 +12,12 @@ public class ProtoLink
     
     private long _lastSentTime;
     private const int FrequencyMs = 30;
+    private const string ThresholdsJsonFile = "Thresholds.json";
 
     private TelemetryThresholds _thresholds;
     private TelemetryBuilder _telemetryBuilder;
     private readonly TranslationControl _translationControl = new();
     
-    private const string ThreasholdsJsonFile = "Thresholds.json";
-
     [StarMapAfterGui]
     public void OnAfterUi(double dt)
     {
@@ -35,18 +33,13 @@ public class ProtoLink
                 _telemetryServer?.Broadcast(envelope);
         }
     }
-
-    [StarMapBeforeGui]
-    public void OnBeforeUi(double dt)
-    {
-    }
-
+    
     [StarMapBeforeMain]
     public void OnFullyLoaded()
     {
         var dllPath = Assembly.GetExecutingAssembly().Location;
         var dllDir  = Path.GetDirectoryName(dllPath)!;
-        var filePath = Path.Combine(dllDir, ThreasholdsJsonFile);
+        var filePath = Path.Combine(dllDir, ThresholdsJsonFile);
         
         if (File.Exists(filePath))
         {
@@ -60,9 +53,6 @@ public class ProtoLink
                 Console.WriteLine("Failed to decode Thresholds.json: " + e.Message);
                 return;
             }
-            
-            Console.WriteLine("Thresholds loaded");
-            Console.WriteLine(JsonSerializer.Serialize(_thresholds));
         }
         else
         {
@@ -76,11 +66,6 @@ public class ProtoLink
         _telemetryServer.Start();
 
         Patcher.Patch();
-    }
-
-    [StarMapImmediateLoad]
-    public void OnImmediatLoad()
-    {
     }
 
     [StarMapUnload]
