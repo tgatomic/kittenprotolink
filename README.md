@@ -29,7 +29,7 @@ You need to have python installed and to install protobuf with `pip install prot
 
 The script will connect to the game on port (47011) with automatic retry. When connected it will:
 - Read the telemetry from the game
-- Every 10 seconds it will set the throttle level to 50% and toggle the engine on/off
+- After 30 seconds it will set the throttle level to 50% and turn the throttle on
 
 ## **Implementation**
 

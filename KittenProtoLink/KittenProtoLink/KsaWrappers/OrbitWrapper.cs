@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class OrbitWrapper
+public class OrbitWrapper (TelemetryThresholds thresholds)
 {
     private OrbitTelemetry? _oldOrbit;
     
@@ -33,14 +33,14 @@ public class OrbitWrapper
         return result;
     }
     
-    private static bool HasSignificantChange(OrbitTelemetry oldOrbit, OrbitTelemetry newOrbit)
+    private bool HasSignificantChange(OrbitTelemetry oldOrbit, OrbitTelemetry newOrbit)
     {
-        if (Helpers.Diff(newOrbit.Apoapsis, oldOrbit.Apoapsis) > TelemetryThresholds.Apoapsis) return true;
-        if (Helpers.Diff(newOrbit.Periapsis, oldOrbit.Periapsis) > TelemetryThresholds.Periapsis) return true;
-        if (Helpers.Diff(newOrbit.Inclination, oldOrbit.Inclination) > TelemetryThresholds.Inclination) return true;
-        if (Helpers.Diff(newOrbit.Eccentricity, oldOrbit.Eccentricity) > TelemetryThresholds.Eccentricity) return true;
-        if (Helpers.Diff(newOrbit.LongitudeOfAscendingNode, oldOrbit.LongitudeOfAscendingNode) > TelemetryThresholds.LongitudeOfAscendingNode) return true;
-        if (Helpers.Diff(newOrbit.ArgumentOfPeriapsis, oldOrbit.ArgumentOfPeriapsis) > TelemetryThresholds.ArgumentOfPeriapsis) return true;
+        if (Helpers.Diff(newOrbit.Apoapsis, oldOrbit.Apoapsis) > thresholds.Orbit.Apoapsis) return true;
+        if (Helpers.Diff(newOrbit.Periapsis, oldOrbit.Periapsis) > thresholds.Orbit.Periapsis) return true;
+        if (Helpers.Diff(newOrbit.Inclination, oldOrbit.Inclination) > thresholds.Orbit.Inclination) return true;
+        if (Helpers.Diff(newOrbit.Eccentricity, oldOrbit.Eccentricity) > thresholds.Orbit.Eccentricity) return true;
+        if (Helpers.Diff(newOrbit.LongitudeOfAscendingNode, oldOrbit.LongitudeOfAscendingNode) > thresholds.Orbit.LongitudeOfAscendingNode) return true;
+        if (Helpers.Diff(newOrbit.ArgumentOfPeriapsis, oldOrbit.ArgumentOfPeriapsis) > thresholds.Orbit.ArgumentOfPeriapsis) return true;
         
         return false;
     }

@@ -4,10 +4,10 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class VehicleWrapper
+public class VehicleWrapper (TelemetryThresholds thresholds)
 {
-    private readonly EngineWrapper _engineWrapper = new();
-    private readonly MassWrapper _massWrapper = new();
+    private readonly EngineWrapper _engineWrapper = new(thresholds);
+    private readonly MassWrapper _massWrapper = new(thresholds);
 
     public VehicleTelemetry? BuildVehicleTelemetry(Vehicle vehicle)
     {

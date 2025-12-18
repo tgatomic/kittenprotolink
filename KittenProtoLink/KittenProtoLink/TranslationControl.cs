@@ -28,11 +28,12 @@ public class TranslationControl
                 vehicle.SetEnum(requestedEngineState ? VehicleEngine.MainIgnite : VehicleEngine.MainShutdown);
             }
 
-            var currentThrottle = vehicle.GetManualThrottle();
-            if (Helpers.Diff(currentThrottle, cmd.Command.Throttle) > TelemetryThresholds.Throttle)
-            {
-                SetThrottle(vehicle, cmd.Command.Throttle);
-            }
+            // TODO: Fix the throttle theshold
+            // var currentThrottle = vehicle.GetManualThrottle();
+            // if (Helpers.Diff(currentThrottle, cmd.Command.Throttle) > TelemetryThresholds.Throttle)
+            // {
+            //     SetThrottle(vehicle, cmd.Command.Throttle);
+            // }
 
             if (cmd.Command.Rotation != null)
             {

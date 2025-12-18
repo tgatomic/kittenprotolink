@@ -62,12 +62,8 @@ jobs:
           copy /Y "%OUT%\KittenProtoLink.pdb" "%PKG%\"
           copy /Y "%OUT%\KittenProtoLink.deps.json" "%PKG%\"
           copy /Y "%OUT%\mod.toml" "%PKG%\"
-
-      - name: Debug tar resolution
-        shell: cmd
-        run: |
-            where tar
-            tar --version
+          copy /Y "%OUT%\Thresholds.json" "%PKG%\"
+          copy /Y "telemetry_client.py" "%PKG%\"
 
       - name: Zip payload (PowerShell via cmd)
         shell: cmd
