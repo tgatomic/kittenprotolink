@@ -63,6 +63,7 @@ jobs:
           copy /Y "%OUT%\KittenProtoLink.deps.json" "%PKG%\"
           copy /Y "%OUT%\mod.toml" "%PKG%\"
           copy /Y "%OUT%\Thresholds.json" "%PKG%\"
+          copy /Y "LICENSE" "%PKG%\"
           if not exist "%PKG%\Example" mkdir "%PKG%\Example"
           copy /Y "telemetry_client.py" "%PKG%\Example\"
           copy /Y "Generated\ksa_controller_pb2.py" "%PKG%\Example\"

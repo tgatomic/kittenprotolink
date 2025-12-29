@@ -7,12 +7,14 @@
         <Configurations>Debug;Release;BuildAndTest</Configurations>
         <Platforms>AnyCPU</Platforms>
         <LangVersion>14</LangVersion>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="Google.Protobuf" Version="3.33.1" />
         <PackageReference Include="Lib.Harmony" Version="2.4.1" />
-        <PackageReference Include="StarMap.API" Version="0.3.4" />
+        <PackageReference Include="ModMenu.Attributes" Version="1.0.1" />
+        <PackageReference Include="StarMap.API" Version="0.3.7-rc.4" />
     </ItemGroup>
 
     <ItemGroup>

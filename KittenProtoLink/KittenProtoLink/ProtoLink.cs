@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Text.Json;
+using Brutal.ImGuiApi;
 using KSA;
+using ModMenu;
 using StarMap.API;
 
 namespace KittenProtoLink;
@@ -32,6 +34,14 @@ public class ProtoLink
             if (envelope != null)
                 _telemetryServer?.Broadcast(envelope);
         }
+    }
+    
+    [ModMenuEntry("ModMenu KittenProtoLink")]
+    public void DrawSubMenuEntry()
+    {
+        Console.WriteLine("DISCOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        ImGui.Text("The test worked!");
+        ImGui.Render();
     }
     
     [StarMapBeforeMain]

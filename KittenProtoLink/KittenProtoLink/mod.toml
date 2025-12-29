@@ -1,1 +1,11 @@
 name = "KittenProtoLink"
+
+[StarMap]
+EntryAssembly = "KittenProtoLink"
+
+[[StarMap.ModDependencies]]
+ModId = "ModMenu"
+Optional = false
+ImportedAssemblies = [
+    "ModMenu.Attributes"
+]

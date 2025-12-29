@@ -8,6 +8,7 @@
         <Copy SourceFiles="$(OutDir)KittenProtoLink.deps.json" DestinationFolder="$(ModFolder)"/>
         <Copy SourceFiles="$(OutDir)KittenProtoLink.dll" DestinationFolder="$(ModFolder)"/>
         <Copy SourceFiles="$(OutDir)KittenProtoLink.pdb" DestinationFolder="$(ModFolder)"/>
+        <Copy SourceFiles="$(OutDir)ModMenu.Attributes.dll" DestinationFolder="$(ModFolder)"/>
         <Copy SourceFiles="$(OutDir)mod.toml" DestinationFolder="$(ModFolder)"/>
         <Copy SourceFiles="$(OutDir)Thresholds.json" DestinationFolder="$(ModFolder)"/>
     </Target>
