@@ -35,13 +35,44 @@ public class ProtoLink
                 _telemetryServer?.Broadcast(envelope);
         }
     }
+
+    public double Apoapsis { get; set; }
+    public double Periapsis { get; set; }
     
-    [ModMenuEntry("ModMenu KittenProtoLink")]
+    [ModMenuEntry("Kitten Proto-Link")]
     public void DrawSubMenuEntry()
     {
-        Console.WriteLine("DISCOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-        ImGui.Text("The test worked!");
-        ImGui.Render();
+        if (ImGui.BeginMenu("Thresholds"))
+        {
+            ImGui.Text("Set telemetry change thresholds");
+            ImGui.Separator();
+            
+            if (ImGui.CollapsingHeader("Orbit"))
+            {
+                var apo = (float)Apoapsis;
+                if (ImGui.DragFloat("Apoapsis", ref apo, 10f, 0f, 2_000_000f))
+                    Apoapsis = apo;
+
+                var peri = (float)Periapsis;
+                if (ImGui.DragFloat("Periapsis", ref peri, 10f, 0f, 2_000_000f))
+                    Periapsis = peri;
+
+                // other orbit fields...
+            }
+            
+            if (ImGui.CollapsingHeader("Navball"))
+            {
+                // navball-related thresholds…
+            }
+
+            if (ImGui.CollapsingHeader("Vehicle"))
+            {
+                // vehicle thresholds…
+            }
+            
+            ImGui.EndMenu();
+        }
+
     }
     
     [StarMapBeforeMain]
