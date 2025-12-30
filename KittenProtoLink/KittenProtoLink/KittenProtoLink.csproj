@@ -56,6 +56,11 @@
             <HintPath>$(GameImportDir)\Brutal.Glfw.dll</HintPath>
             <Private>false</Private>
         </Reference>
+
+        <Reference Include="Brutal.Core.Strings">
+            <HintPath>$(GameImportDir)\Brutal.Core.Strings.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,38 +1,38 @@
 {
   "Mass": {
-    "PropellantMass": 0.01,
-    "InertMass": 0.01,
-    "TotalMass": 0.01,
-    "DeltaVRemaining": 0.01,
-    "ThrustWeightRatio": 0.01
+    "PropellantMass": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "InertMass": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "TotalMass": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "DeltaVRemaining": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "ThrustWeightRatio": { "Value": 0.01, "DefaultValue": 0.01, "Active": true }
   },
   "Engine": {
-    "FuelFlow": 0.01,
-    "Throttle": 0.01,
-    "Thrust": 0.01
+    "FuelFlow": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "Throttle": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "Thrust": { "Value": 0.01, "DefaultValue": 0.01, "Active": true }
   },
   "Orbit": {
-    "Apoapsis": 0.01,
-    "Periapsis": 0.01,
-    "Inclination": 0.01,
-    "Eccentricity": 0.01,
-    "LongitudeOfAscendingNode": 0.01,
-    "ArgumentOfPeriapsis": 0.01,
-    "TrueAnomaly": 0.01
+    "Apoapsis": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "Periapsis": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "Inclination": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "Eccentricity": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "LongitudeOfAscendingNode": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "ArgumentOfPeriapsis": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "TrueAnomaly": { "Value": 0.01, "DefaultValue": 0.01, "Active": true }
   },
   "Kinematic": {
-    "PositionEcl": 0.01,
-    "VelocityEcl": 0.01,
-    "AltitudeSurface": 0.01,
-    "AltitudeRadar": 0.01,
-    "SurfaceSpeed": 0.01,
-    "InertialSpeed": 0.01,
-    "BodyToEcl": 0.01,
-    "AccelerationBody": 0.01,
-    "AngularVelocity": 0.01
+    "PositionEcl": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "VelocityEcl": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "AltitudeSurface": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "AltitudeRadar": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "SurfaceSpeed": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "InertialSpeed": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "BodyToEcl": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "AccelerationBody": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "AngularVelocity": { "Value": 0.01, "DefaultValue": 0.01, "Active": true }
   },
   "FlightComputer": {
-    "BurnTimeRemaining": 0.01,
-    "BurnDvRemaining": 0.01
+    "BurnTimeRemaining": { "Value": 0.01, "DefaultValue": 0.01, "Active": true },
+    "BurnDvRemaining": { "Value": 0.01, "DefaultValue": 0.01, "Active": true }
   }
 }

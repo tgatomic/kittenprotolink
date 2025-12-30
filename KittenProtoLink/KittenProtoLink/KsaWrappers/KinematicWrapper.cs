@@ -50,9 +50,9 @@ public class KinematicWrapper (TelemetryThresholds thresholds)
     
     private bool HasSignificantChange(KinematicTelemetry oldMass, KinematicTelemetry newMass)
     {
-        if (thresholds.Kinematic.PositionEcl.Active &&
+        if (thresholds.Kinematic.PositionEcl.Active && oldMass.PositionEcl != null && newMass.PositionEcl != null &&
             Helpers.Diff(newMass.PositionEcl, oldMass.PositionEcl) > thresholds.Kinematic.PositionEcl.Value) return true;
-        if (thresholds.Kinematic.VelocityEcl.Active &&
+        if (thresholds.Kinematic.VelocityEcl.Active && oldMass.VelocityEcl != null && newMass.VelocityEcl != null &&
             Helpers.Diff(newMass.VelocityEcl, oldMass.VelocityEcl) > thresholds.Kinematic.VelocityEcl.Value) return true;
         if (thresholds.Kinematic.AltitudeSurface.Active &&
             Helpers.Diff(newMass.AltitudeSurface, oldMass.AltitudeSurface) > thresholds.Kinematic.AltitudeSurface.Value) return true;
@@ -62,11 +62,11 @@ public class KinematicWrapper (TelemetryThresholds thresholds)
             Helpers.Diff(newMass.SurfaceSpeed, oldMass.SurfaceSpeed) > thresholds.Kinematic.SurfaceSpeed.Value) return true;
         if (thresholds.Kinematic.InertialSpeed.Active &&
             Helpers.Diff(newMass.InertialSpeed, oldMass.InertialSpeed) > thresholds.Kinematic.InertialSpeed.Value) return true;
-        if (thresholds.Kinematic.BodyToEcl.Active &&
+        if (thresholds.Kinematic.BodyToEcl.Active && oldMass.BodyToEcl != null && newMass.BodyToEcl != null &&
             Helpers.Diff(newMass.BodyToEcl, oldMass.BodyToEcl) > thresholds.Kinematic.BodyToEcl.Value) return true;
-        if (thresholds.Kinematic.AccelerationBody.Active &&
+        if (thresholds.Kinematic.AccelerationBody.Active && oldMass.AccelerationBody != null && newMass.AccelerationBody != null &&
             Helpers.Diff(newMass.AccelerationBody, oldMass.AccelerationBody) > thresholds.Kinematic.AccelerationBody.Value) return true;
-        if (thresholds.Kinematic.AngularVelocity.Active &&
+        if (thresholds.Kinematic.AngularVelocity.Active && oldMass.AngularVelocity != null && newMass.AngularVelocity != null &&
             Helpers.Diff(newMass.AngularVelocity, oldMass.AngularVelocity) > thresholds.Kinematic.AngularVelocity.Value) return true;
 
         return false;
