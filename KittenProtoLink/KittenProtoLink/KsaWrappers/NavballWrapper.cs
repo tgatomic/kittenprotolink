@@ -24,6 +24,10 @@ public class NavballWrapper (TelemetryThresholds thresholds)
             AttitudeAnglesDeg = Helpers.ToVector3d(nav.AttitudeAngles),
             AttitudeRatesRad = Helpers.ToVector3d(nav.AttitudeRates)
         };
+        
+        if (!thresholds.Orbit.Apoapsis.Active)     telemetry.NavballToBody = default;
+        if (!thresholds.Orbit.Periapsis.Active)    telemetry.AttitudeAnglesDeg = default;
+        if (!thresholds.Orbit.Inclination.Active)  telemetry.AttitudeRatesRad = default;
 
         if (_last == null || HasSignificantChange(_last, telemetry)) {
             _last = telemetry;
@@ -36,9 +40,12 @@ public class NavballWrapper (TelemetryThresholds thresholds)
     private bool HasSignificantChange(NavballTelemetry oldOrbit, NavballTelemetry newOrbit)
     {
         if (oldOrbit.Frame != newOrbit.Frame) return true;
-        if (Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > thresholds.Orbit.Apoapsis) return true;
-        if (Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > thresholds.Orbit.Periapsis) return true;
-        if (Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > thresholds.Orbit.Inclination) return true;
+        if (thresholds.Orbit.Apoapsis.Active &&
+            Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > thresholds.Orbit.Apoapsis.Value) return true;
+        if (thresholds.Orbit.Periapsis.Active &&
+            Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > thresholds.Orbit.Periapsis.Value) return true;
+        if (thresholds.Orbit.Inclination.Active &&
+            Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > thresholds.Orbit.Inclination.Value) return true;
         
         return false;
     }

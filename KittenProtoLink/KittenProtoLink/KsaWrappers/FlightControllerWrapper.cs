@@ -25,7 +25,10 @@ public class FlightControllerWrapper (TelemetryThresholds thresholds)
             BurnTimeRemaining = burn?.BurnDuration ?? 0f,
             BurnDvRemaining = burn?.DeltaVToGoCci.Length() ?? 0f
         };
-
+        
+        if (!thresholds.FlightComputer.BurnTimeRemaining.Active)  flightComputer.BurnTimeRemaining = 0;
+        if (!thresholds.FlightComputer.BurnDvRemaining.Active)    flightComputer.BurnDvRemaining = 0;
+        
         if (_oldFlightComputer == null)
         {
             _oldFlightComputer = flightComputer;
@@ -45,8 +48,10 @@ public class FlightControllerWrapper (TelemetryThresholds thresholds)
         if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
         if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
         if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
-        if (Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > thresholds.FlightComputer.BurnTimeRemaining) return true;
-        if (Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > thresholds.FlightComputer.BurnDvRemaining) return true;
+        if (thresholds.FlightComputer.BurnTimeRemaining.Active &&
+            Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > thresholds.FlightComputer.BurnTimeRemaining.Value) return true;
+        if (thresholds.FlightComputer.BurnDvRemaining.Active &&
+            Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > thresholds.FlightComputer.BurnDvRemaining.Value) return true;
     
         return false;
     }
