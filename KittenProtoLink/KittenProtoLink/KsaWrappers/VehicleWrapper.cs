@@ -4,7 +4,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class VehicleWrapper (TelemetryThresholds thresholds)
+public class VehicleWrapper (SettingsMenu thresholds)
 {
     private readonly EngineWrapper _engineWrapper = new(thresholds);
     private readonly MassWrapper _massWrapper = new(thresholds);

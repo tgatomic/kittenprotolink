@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class FlightControllerWrapper (TelemetryThresholds thresholds)
+public class FlightControllerWrapper (SettingsMenu settings)
 {
     private FlightComputerTelemetry? _oldFlightComputer;
     
@@ -26,8 +26,8 @@ public class FlightControllerWrapper (TelemetryThresholds thresholds)
             BurnDvRemaining = burn?.DeltaVToGoCci.Length() ?? 0f
         };
         
-        if (!thresholds.FlightComputer.BurnTimeRemaining.Active)  flightComputer.BurnTimeRemaining = 0;
-        if (!thresholds.FlightComputer.BurnDvRemaining.Active)    flightComputer.BurnDvRemaining = 0;
+        if (!settings.Thresholds.FlightComputer.BurnTimeRemaining.Active)  flightComputer.BurnTimeRemaining = 0;
+        if (!settings.Thresholds.FlightComputer.BurnDvRemaining.Active)    flightComputer.BurnDvRemaining = 0;
         
         if (_oldFlightComputer == null)
         {
@@ -48,10 +48,10 @@ public class FlightControllerWrapper (TelemetryThresholds thresholds)
         if (newFlight.AttitudeFrame != oldFlight.AttitudeFrame) return true;
         if (newFlight.StabilizationActive != oldFlight.StabilizationActive) return true;
         if (newFlight.ManualThrustPulse != oldFlight.ManualThrustPulse) return true;
-        if (thresholds.FlightComputer.BurnTimeRemaining.Active &&
-            Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > thresholds.FlightComputer.BurnTimeRemaining.Value) return true;
-        if (thresholds.FlightComputer.BurnDvRemaining.Active &&
-            Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > thresholds.FlightComputer.BurnDvRemaining.Value) return true;
+        if (settings.Thresholds.FlightComputer.BurnTimeRemaining.Active &&
+            Helpers.Diff(newFlight.BurnTimeRemaining, oldFlight.BurnTimeRemaining) > settings.Thresholds.FlightComputer.BurnTimeRemaining.Value) return true;
+        if (settings.Thresholds.FlightComputer.BurnDvRemaining.Active &&
+            Helpers.Diff(newFlight.BurnDvRemaining, oldFlight.BurnDvRemaining) > settings.Thresholds.FlightComputer.BurnDvRemaining.Value) return true;
     
         return false;
     }

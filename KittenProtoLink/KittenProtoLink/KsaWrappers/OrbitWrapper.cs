@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class OrbitWrapper (TelemetryThresholds thresholds)
+public class OrbitWrapper (SettingsMenu settings)
 {
     private OrbitTelemetry? _oldOrbit;
     
@@ -19,12 +19,12 @@ public class OrbitWrapper (TelemetryThresholds thresholds)
             ArgumentOfPeriapsis = vehicle.ArgumentOfPeriapsis
         };
         
-        if (!thresholds.Orbit.Apoapsis.Active)                  newOrbit.Apoapsis = 0;
-        if (!thresholds.Orbit.Periapsis.Active)                 newOrbit.Periapsis = 0;
-        if (!thresholds.Orbit.Inclination.Active)               newOrbit.Inclination = 0;
-        if (!thresholds.Orbit.Eccentricity.Active)              newOrbit.Eccentricity = 0;
-        if (!thresholds.Orbit.LongitudeOfAscendingNode.Active)  newOrbit.LongitudeOfAscendingNode = 0;
-        if (!thresholds.Orbit.ArgumentOfPeriapsis.Active)       newOrbit.ArgumentOfPeriapsis = 0;
+        if (!settings.Thresholds.Orbit.Apoapsis.Active)                  newOrbit.Apoapsis = 0;
+        if (!settings.Thresholds.Orbit.Periapsis.Active)                 newOrbit.Periapsis = 0;
+        if (!settings.Thresholds.Orbit.Inclination.Active)               newOrbit.Inclination = 0;
+        if (!settings.Thresholds.Orbit.Eccentricity.Active)              newOrbit.Eccentricity = 0;
+        if (!settings.Thresholds.Orbit.LongitudeOfAscendingNode.Active)  newOrbit.LongitudeOfAscendingNode = 0;
+        if (!settings.Thresholds.Orbit.ArgumentOfPeriapsis.Active)       newOrbit.ArgumentOfPeriapsis = 0;
 
         if (_oldOrbit == null)
         {
@@ -42,18 +42,18 @@ public class OrbitWrapper (TelemetryThresholds thresholds)
     
     private bool HasSignificantChange(OrbitTelemetry oldOrbit, OrbitTelemetry newOrbit)
     {
-        if (thresholds.Orbit.Apoapsis.Active &&
-            Helpers.Diff(newOrbit.Apoapsis, oldOrbit.Apoapsis) > thresholds.Orbit.Apoapsis.Value) return true;
-        if (thresholds.Orbit.Periapsis.Active &&
-            Helpers.Diff(newOrbit.Periapsis, oldOrbit.Periapsis) > thresholds.Orbit.Periapsis.Value) return true;
-        if (thresholds.Orbit.Inclination.Active &&
-            Helpers.Diff(newOrbit.Inclination, oldOrbit.Inclination) > thresholds.Orbit.Inclination.Value) return true;
-        if (thresholds.Orbit.Eccentricity.Active &&
-            Helpers.Diff(newOrbit.Eccentricity, oldOrbit.Eccentricity) > thresholds.Orbit.Eccentricity.Value) return true;
-        if (thresholds.Orbit.LongitudeOfAscendingNode.Active &&
-            Helpers.Diff(newOrbit.LongitudeOfAscendingNode, oldOrbit.LongitudeOfAscendingNode) > thresholds.Orbit.LongitudeOfAscendingNode.Value) return true;
-        if (thresholds.Orbit.ArgumentOfPeriapsis.Active &&
-            Helpers.Diff(newOrbit.ArgumentOfPeriapsis, oldOrbit.ArgumentOfPeriapsis) > thresholds.Orbit.ArgumentOfPeriapsis.Value) return true;
+        if (settings.Thresholds.Orbit.Apoapsis.Active &&
+            Helpers.Diff(newOrbit.Apoapsis, oldOrbit.Apoapsis) > settings.Thresholds.Orbit.Apoapsis.Value) return true;
+        if (settings.Thresholds.Orbit.Periapsis.Active &&
+            Helpers.Diff(newOrbit.Periapsis, oldOrbit.Periapsis) > settings.Thresholds.Orbit.Periapsis.Value) return true;
+        if (settings.Thresholds.Orbit.Inclination.Active &&
+            Helpers.Diff(newOrbit.Inclination, oldOrbit.Inclination) > settings.Thresholds.Orbit.Inclination.Value) return true;
+        if (settings.Thresholds.Orbit.Eccentricity.Active &&
+            Helpers.Diff(newOrbit.Eccentricity, oldOrbit.Eccentricity) > settings.Thresholds.Orbit.Eccentricity.Value) return true;
+        if (settings.Thresholds.Orbit.LongitudeOfAscendingNode.Active &&
+            Helpers.Diff(newOrbit.LongitudeOfAscendingNode, oldOrbit.LongitudeOfAscendingNode) > settings.Thresholds.Orbit.LongitudeOfAscendingNode.Value) return true;
+        if (settings.Thresholds.Orbit.ArgumentOfPeriapsis.Active &&
+            Helpers.Diff(newOrbit.ArgumentOfPeriapsis, oldOrbit.ArgumentOfPeriapsis) > settings.Thresholds.Orbit.ArgumentOfPeriapsis.Value) return true;
         
         return false;
     }

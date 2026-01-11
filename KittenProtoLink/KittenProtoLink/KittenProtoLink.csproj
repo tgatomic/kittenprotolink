@@ -21,7 +21,7 @@
         <None Update="mod.toml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Thresholds.json">
+        <None Update="Thresholds_template.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

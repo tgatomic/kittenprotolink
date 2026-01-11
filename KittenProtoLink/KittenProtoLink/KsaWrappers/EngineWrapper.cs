@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class EngineWrapper (TelemetryThresholds thresholds)
+public class EngineWrapper (SettingsMenu settings)
 {
     private EngineTelemetry? _oldVehicle;
     
@@ -22,13 +22,13 @@ public class EngineWrapper (TelemetryThresholds thresholds)
             FuelFlow = fc.VehicleConfig.TotalEngineVacuumMassFlowRate * throttle,
         };
 
-        if (!thresholds.Engine.FuelFlow.Active) newVehicle.FuelFlow = 0;
-        if (!thresholds.Engine.Throttle.Active)
+        if (!settings.Thresholds.Engine.FuelFlow.Active) newVehicle.FuelFlow = 0;
+        if (!settings.Thresholds.Engine.Throttle.Active)
         {
             newVehicle.Throttle = 0;
             newVehicle.MinThrottle = 0;
         }
-        if (!thresholds.Engine.Thrust.Active) newVehicle.Thrust = 0;
+        if (!settings.Thresholds.Engine.Thrust.Active) newVehicle.Thrust = 0;
 
         if (_oldVehicle == null)
         {
@@ -56,14 +56,14 @@ public class EngineWrapper (TelemetryThresholds thresholds)
     private bool HasSignificantChange(EngineTelemetry oldVehicle, EngineTelemetry newVehicle)
     {
         if (newVehicle.EngineEnabled != oldVehicle.EngineEnabled) return true;
-        if (thresholds.Engine.FuelFlow.Active &&
-            Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > thresholds.Engine.FuelFlow.Value) return true;
-        if (thresholds.Engine.Throttle.Active &&
-            Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > thresholds.Engine.Throttle.Value) return true;
-        if (thresholds.Engine.Throttle.Active &&
-            Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > thresholds.Engine.Throttle.Value) return true;
-        if (thresholds.Engine.Thrust.Active &&
-            Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > thresholds.Engine.Thrust.Value) return true;
+        if (settings.Thresholds.Engine.FuelFlow.Active &&
+            Helpers.Diff(newVehicle.FuelFlow, oldVehicle.FuelFlow) > settings.Thresholds.Engine.FuelFlow.Value) return true;
+        if (settings.Thresholds.Engine.Throttle.Active &&
+            Helpers.Diff(newVehicle.Throttle, oldVehicle.Throttle) > settings.Thresholds.Engine.Throttle.Value) return true;
+        if (settings.Thresholds.Engine.Throttle.Active &&
+            Helpers.Diff(newVehicle.MinThrottle, oldVehicle.MinThrottle) > settings.Thresholds.Engine.Throttle.Value) return true;
+        if (settings.Thresholds.Engine.Thrust.Active &&
+            Helpers.Diff(newVehicle.Thrust, oldVehicle.Thrust) > settings.Thresholds.Engine.Thrust.Value) return true;
         
         return false;
     }

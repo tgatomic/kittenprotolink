@@ -3,7 +3,7 @@ using Ksa.Controller;
 
 namespace KittenProtoLink.KsaWrappers;
 
-public class NavballWrapper (TelemetryThresholds thresholds)
+public class NavballWrapper (SettingsMenu settings)
 {
     private NavballTelemetry? _last;
 
@@ -25,9 +25,9 @@ public class NavballWrapper (TelemetryThresholds thresholds)
             AttitudeRatesRad = Helpers.ToVector3d(nav.AttitudeRates)
         };
         
-        if (!thresholds.Orbit.Apoapsis.Active)     telemetry.NavballToBody = null;
-        if (!thresholds.Orbit.Periapsis.Active)    telemetry.AttitudeAnglesDeg = null;
-        if (!thresholds.Orbit.Inclination.Active)  telemetry.AttitudeRatesRad = null;
+        if (!settings.Thresholds.Orbit.Apoapsis.Active)     telemetry.NavballToBody = null;
+        if (!settings.Thresholds.Orbit.Periapsis.Active)    telemetry.AttitudeAnglesDeg = null;
+        if (!settings.Thresholds.Orbit.Inclination.Active)  telemetry.AttitudeRatesRad = null;
 
         if (_last == null || HasSignificantChange(_last, telemetry)) {
             _last = telemetry;
@@ -40,12 +40,12 @@ public class NavballWrapper (TelemetryThresholds thresholds)
     private bool HasSignificantChange(NavballTelemetry oldOrbit, NavballTelemetry newOrbit)
     {
         if (oldOrbit.Frame != newOrbit.Frame) return true;
-        if (thresholds.Orbit.Apoapsis.Active && newOrbit.NavballToBody != null && oldOrbit.NavballToBody != null &&
-            Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > thresholds.Orbit.Apoapsis.Value) return true;
-        if (thresholds.Orbit.Periapsis.Active && newOrbit.AttitudeAnglesDeg != null && oldOrbit.AttitudeAnglesDeg != null &&
-            Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > thresholds.Orbit.Periapsis.Value) return true;
-        if (thresholds.Orbit.Inclination.Active && newOrbit.AttitudeRatesRad != null && oldOrbit.AttitudeRatesRad != null &&
-            Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > thresholds.Orbit.Inclination.Value) return true;
+        if (settings.Thresholds.Orbit.Apoapsis.Active && newOrbit.NavballToBody != null && oldOrbit.NavballToBody != null &&
+            Helpers.Diff(newOrbit.NavballToBody, oldOrbit.NavballToBody) > settings.Thresholds.Orbit.Apoapsis.Value) return true;
+        if (settings.Thresholds.Orbit.Periapsis.Active && newOrbit.AttitudeAnglesDeg != null && oldOrbit.AttitudeAnglesDeg != null &&
+            Helpers.Diff(newOrbit.AttitudeAnglesDeg, oldOrbit.AttitudeAnglesDeg) > settings.Thresholds.Orbit.Periapsis.Value) return true;
+        if (settings.Thresholds.Orbit.Inclination.Active && newOrbit.AttitudeRatesRad != null && oldOrbit.AttitudeRatesRad != null &&
+            Helpers.Diff(newOrbit.AttitudeRatesRad, oldOrbit.AttitudeRatesRad) > settings.Thresholds.Orbit.Inclination.Value) return true;
         
         return false;
     }

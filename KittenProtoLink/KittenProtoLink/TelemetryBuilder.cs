@@ -4,16 +4,16 @@ using Ksa.Controller;
 
 namespace KittenProtoLink;
 
-public class TelemetryBuilder(TelemetryThresholds thresholds)
+public class TelemetryBuilder(SettingsMenu settings)
 {
     private const uint ProtocolVersion = 1;
     private uint _sequence;
 
-    private readonly VehicleWrapper _vehicleWrapper = new(thresholds);
-    private readonly OrbitWrapper _orbitWrapper = new(thresholds);
-    private readonly KinematicWrapper _kinematicWrapper = new(thresholds);
-    private readonly FlightControllerWrapper _flightWrapper = new(thresholds);
-    private readonly NavballWrapper _navballWrapper = new(thresholds);
+    private readonly VehicleWrapper _vehicleWrapper = new(settings);
+    private readonly OrbitWrapper _orbitWrapper = new(settings);
+    private readonly KinematicWrapper _kinematicWrapper = new(settings);
+    private readonly FlightControllerWrapper _flightWrapper = new(settings);
+    private readonly NavballWrapper _navballWrapper = new(settings);
 
     public Envelope? BuildTelemetryEnvelope(Vehicle vehicle)
     {

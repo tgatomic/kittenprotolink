@@ -12,8 +12,9 @@ public class ProtoLink
     
     private long _lastSentTime;
     private const int FrequencyMs = 30;
-    private const string ThresholdsJsonFile = "Thresholds.json";
 
+
+    private SettingsMenu _settings;
     private TelemetryThresholds _thresholds;
     private TelemetryBuilder _telemetryBuilder;
     private readonly TranslationControl _translationControl = new();
@@ -37,30 +38,8 @@ public class ProtoLink
     [StarMapBeforeMain]
     public void OnFullyLoaded()
     {
-        var dllPath = Assembly.GetExecutingAssembly().Location;
-        var dllDir  = Path.GetDirectoryName(dllPath)!;
-        var filePath = Path.Combine(dllDir, ThresholdsJsonFile);
-        
-        if (File.Exists(filePath))
-        {
-            var thresholdsRaw = File.ReadAllText(filePath);
-            try
-            {
-                _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw)!;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Failed to decode Thresholds.json: " + e.Message);
-                return;
-            }
-        }
-        else
-        {
-            throw new Exception("Thresholds file not found");
-        }
-
-        SettingsMenu.Configure(_thresholds);
-        _telemetryBuilder = new(_thresholds);
+        _settings = new SettingsMenu();
+        _telemetryBuilder = new(_settings);
         
         _telemetryServer = new TelemetryServer();
         _telemetryServer.CommandReceived += _translationControl.HandleCommand;

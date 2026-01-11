@@ -1,15 +1,86 @@
+using System.Reflection;
+using System.Text.Json;
 using Brutal.ImGuiApi;
 using KittenProtoLink.Data;
 using ModMenu;
-using StarMap.API;
 
 namespace KittenProtoLink;
 
 public class SettingsMenu
 {
-    private static TelemetryThresholds? _thresholds;
+    private TelemetryThresholds? _thresholds;
+   
+    public TelemetryThresholds Thresholds { 
+        get => _thresholds ?? throw new InvalidOperationException();
+        set => _thresholds = value;
+    }
+    
+    private const string ThresholdsJsonFile = "KittenProtoLinkSettings.json";
+    private const string ThresholdsTemplateJsonFile = "Thresholds_template.json";
+    private static CancellationTokenSource? _saveCts;
 
-    public static void Configure(TelemetryThresholds thresholds) => _thresholds = thresholds;
+    private string fullFilePath;
+
+    public SettingsMenu()
+    {
+        var docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        var myGamesDir = Path.Combine(docs, "My Games");
+        var targetDir = Path.Combine(myGamesDir, "Kitten Space Agency");
+        fullFilePath = Path.Combine(targetDir, ThresholdsJsonFile);
+        
+        if (File.Exists(fullFilePath))
+        {
+            var thresholdsRaw = File.ReadAllText(fullFilePath);
+            try
+            {
+                _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw)!;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to decode Thresholds.json: " + e.Message);
+            }
+        }
+        else
+        {
+            var dllPath = Assembly.GetExecutingAssembly().Location;
+            var dllDir  = Path.GetDirectoryName(dllPath)!;
+            
+            if (!File.Exists(Path.Combine(dllDir, ThresholdsTemplateJsonFile)))
+            {
+                throw new FileNotFoundException("Thresholds template file not found");
+            }
+            
+            File.WriteAllText(fullFilePath, File.ReadAllText(Path.Combine(dllDir, ThresholdsTemplateJsonFile)));
+            
+            var thresholdsRaw = File.ReadAllText(fullFilePath);
+            try
+            {
+                _thresholds = JsonSerializer.Deserialize<TelemetryThresholds>(thresholdsRaw)!;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to decode Thresholds.json: " + e.Message);
+            }
+        }
+    }
+    
+    private void RequestSave()
+    {
+        _saveCts?.Cancel();
+        _saveCts = new CancellationTokenSource();
+        var token = _saveCts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1), token);
+                var json = JsonSerializer.Serialize(_thresholds, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(fullFilePath, json);
+            }
+            catch (TaskCanceledException) { /* debounced */ }
+        }, token);
+    }
     
     [ModMenuEntry("Kitten Proto-Link")]
     public void DrawSubMenuEntry()
@@ -81,7 +152,7 @@ public class SettingsMenu
         ImGui.EndMenu();
     }
 
-    private static void DrawThreshold(string label, ThresholdInformation info, float speed, float min, float max)
+    private void DrawThreshold(string label, ThresholdInformation info, float speed, float min, float max)
     {
         var active = info.Active;
         if (ImGui.Checkbox($"Send {label}", ref active))
@@ -91,10 +162,17 @@ public class SettingsMenu
 
         var value = (float)info.Value;
         if (ImGui.DragFloat($"{label} Delta", ref value, speed, min, max))
+        {
             info.Value = value;
+            RequestSave();
+        }
 
         ImGui.SameLine();
         if (ImGui.SmallButton($"Reset##{label}"))
+        { 
             info.Value = info.DefaultValue;
+            info.Active = true;
+            RequestSave();
+        }
     }
 }
